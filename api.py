@@ -102,7 +102,7 @@ class PredictionResponse(BaseModel):
     confidence_pct: Optional[float] = None
 
 
-@app.get("/health")
+@app.get("/api/health")
 def health_check():
     return {
         "status": "ok" if model_store["model"] is not None else "degraded",
@@ -112,7 +112,7 @@ def health_check():
 
 
 # ✅ NEW ENDPOINT: Fetches a real sample row from your CSV dataset
-@app.get("/random-battery")
+@app.get("/api/random-battery")
 def get_random_battery_row():
     if not os.path.exists(DATASET_PATH):
         raise HTTPException(
@@ -131,7 +131,7 @@ def get_random_battery_row():
         )
 
 
-@app.post("/predict", response_model=PredictionResponse)
+@app.post("/api/predict", response_model=PredictionResponse)
 def predict(payload: BatteryTelemetry):
     model = model_store["model"]
     if model is None:
